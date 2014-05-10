@@ -1,4 +1,4 @@
 lobby
 =====
 
-A Lobby server for minecraft
+My Skripts scripts for my lobby server
