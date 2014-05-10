@@ -1,0 +1,37 @@
+command /gmc:
+	permission: command.gamemode or command.*
+	trigger:
+		set gamemode of player to creative
+command /gms:
+	permission: command.gamemode or command.*
+	trigger:
+		set gamemode of player to survival
+command /fix:
+	trigger:
+		if {nick.%player%} is set:
+			set {_player} to {nick.%player%}
+		else:
+			set {_player} to player
+		set player nametag to "%{_player}%"
+		set player's tab list name to "%{_player}%"
+		teleport player to {spawn}
+		wait 1 tick
+		execute console command "nbt *%player% Inventory = $Inventory"
+command /nick <text> <player=%player%>:
+	permission: command.nick
+	trigger:
+		set {nick.%arg 2%} to coloured argument 1
+		message "%arg 2%'s Nickname set to ''%colored arg 1%&r'' type /fix to update"
+		if arg 2 isn't player:
+			message "%player% set your nickname to %arg 1%" to arg 2
+command /spawn:
+	trigger:
+		teleport player to {spawn}
+command /setspawn:
+	permission: command.spawn.set or command.*
+	trigger:
+		set {spawn} to location of player
+command /server <player> <text>:
+	usage: /server <player> <server>
+	trigger:
+		connect argument 1 to argument 2
