@@ -1,0 +1,77 @@
+on first join:
+	set {nick.%player%} to "%player%"
+on join:
+	set {_player} to {nick.%player%}
+	set join message to "&8[&9+&8] &7%player% as %{_player}%"
+	set player nametag to "%{_player}%"
+	set player's tab list name to "%{_player}%"
+	teleport player to {spawn}
+	wait 1 tick
+	execute console command "nbt *%player% Inventory = $Inventory"
+	add 1 to {online}
+	while player is online:
+		display scoreboard named "&bStats" to player
+		make score of "&aName: %{_player}%" in scoreboard of player to 1
+		make score of "&c%{online}%" in scoreboard of player to 2
+		make score of "&aOnline players" in scoreboard of player to 3
+		move display of player to "sidebar"
+		wait 2 tick
+on skript start:
+	set {online} to 0
+on quit:
+	remove 1 from {online}
+	set {_player} to {nick.%player%}
+	set quit message to "&8[&9-&8] &7%{_player}%"
+on right click with a compass:
+	wait 1 tick
+	show "s;1;i;Diamond sword;n;&8KitPvp;s;2;i;TNT;n;&8Factions;s;3;i;fishing rod;n;&8MiniGames;s;4;i;bars;n;&8Prison;" with 1 row named "&9Servers" to player
+#Chat system a bit for nick names in ./commands.sk
+on chat:
+	cancel the event
+	set {_player} to {nick.%player%}
+	if player has permission "chat.color":
+		broadcast "%{_player}%&8:&r %colored message%"
+	else:
+		broadcast "%{_player}%&8:&r %uncolored message%"
+#Hide or reveal players
+on right click:
+	if tool of player is a slimeball:
+		wait 1 tick
+		set player's tool to magma cream
+		set name of player's tool to "&9Show players"
+		#set the 1st line of the item's lore to "Right click to use"
+		hide all players from player
+		stop
+	if tool of player is a magma cream:
+		wait 1 tick
+		set player's tool to slimeball
+		set name of player's tool to "&9Hide players"
+		#set the 1st line of the item's lore to "Right click to use"
+		reveal all players to player
+		stop
+#Special effects
+on right click with a nether star:
+	if player has permission "lobby.donater":
+		wait 1 tick
+		show "s;1;i;Firework rocket;c;trail %player%;n;&8Trails;s;2;i;Melon block;n;&8Melon;c;hat %player% melon" with 1 row named "&9Awesome Features" to player
+#Should be in ./commands.sk
+command /hat <player> <item>:
+	trigger:
+		set helmet of arg 1 to arg 2
+command /trail <player> [<text>]:
+	trigger:
+		if arg 2 isn't set:
+			wait 1 tick
+			show "s;1;i;bonemeal;c;trail %player% smoke;n;&8Smoke;s;2;i;redstone;c;trail %player% reddust;n;&8RedDust" with 1 row named "&9Trails" to arg-player
+		else:
+			set {trail.%arg 1%} to arg 2
+			broadcast "%arg 1% %arg 2%" to world
+on join:
+	while player is online:
+		if {trail.%player%} is set:
+			if {trail.%player%} is "reddust":
+				set {_d} to 1
+			else:
+				set {_d} to 0
+			play 30 of effect {trail.%player%} with data {_d} at player
+			wait 2 ticks
