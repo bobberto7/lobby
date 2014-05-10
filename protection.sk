@@ -1,0 +1,23 @@
+on hunger meter change:
+	cancel the event
+on damage of player:
+	cancel the event
+on break:
+	if player's gamemode isn't creative:
+		cancel the event
+on place:
+	if player's gamemode isn't creative:
+		cancel the event
+on drop:
+	cancel the event
+on pick up:
+	cancel the event
+on command "/stop":
+	if player is a player:
+		cancel the event
+		send "[Command] %player% failed to execute the command 'stop'" to console
+		send "&cYou no stop me, I stop you."
+on command:
+	log "[%time%]: %player% attempted the command %command% %arguments%" to "commands.log"
+on chat:
+	log "[%time%]: %player% said %message%" to "chat.log"
